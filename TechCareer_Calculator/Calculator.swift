@@ -75,6 +75,10 @@ class Calculator: UIViewController {
         
     }
     
+    func configureCalculatorLabel() {
+        
+    }
+    
     func configureButton() {
         for button in buttonList {
                     button.layer.cornerRadius = 10
@@ -132,13 +136,17 @@ class Calculator: UIViewController {
         guard let calculator = self.calculationLabel.text else {
             return
         }
-        if calculationLabel.text == "0" {
-            self.calculationLabel.text = "\(number)"
+        
+        if calculator.count > 22 {
+            print("FAZLAAAAA")
         } else {
-            self.calculationLabel.text = calculator + "\(number)"
+            if calculationLabel.text == "0" {
+                self.calculationLabel.text = "\(number)"
+            } else {
+                self.calculationLabel.text = calculator + "\(number)"
+            }
         }
     }
-    
     
     func configureSembolAction(sembol: String) {
         guard let calculator = self.calculationLabel.text else {
@@ -215,13 +223,32 @@ class Calculator: UIViewController {
         
         equalButton.addAction(UIAction(handler: { _ in
             
-            self.calculator()
+            guard let calculator = self.calculationLabel.text else {
+                return
+            }
+            if calculator.count >= 1 {
+                let lastIndex = calculator.index(calculator.endIndex, offsetBy: -1)
+                let secondToLastCharacter = calculator[lastIndex]
+                
+                if secondToLastCharacter == "/" ||
+                    secondToLastCharacter == "*" ||
+                    secondToLastCharacter == "+" ||
+                    secondToLastCharacter == "-" ||
+                    secondToLastCharacter == "." ||
+                    calculator == "0" {
+                } else {
+                    self.calculator()
+                    
+                }
+            }
+            
+            
+            
+            
+            
+            
             
         }), for: .touchUpInside)
-        
-        
-        
-        
         
     }
     
@@ -230,9 +257,6 @@ class Calculator: UIViewController {
         guard let calculator = self.calculationLabel.text else {
             return
         }
-        
-        
-//            let string = "5*11"
         let regex = try! NSRegularExpression(pattern: "\\d+")
         let matches = regex.matches(in: calculator, range: NSRange(calculator.startIndex..., in: calculator))
 
