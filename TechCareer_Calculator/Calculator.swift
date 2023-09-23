@@ -42,7 +42,6 @@ class Calculator: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         buttonList.append(acButton)
         buttonList.append(deleteButton)
         buttonList.append(divideButton)
@@ -133,7 +132,6 @@ class Calculator: UIViewController {
         guard let calculator = self.calculationLabel.text else {
             return
         }
-        
         if calculationLabel.text == "0" {
             self.calculationLabel.text = "\(number)"
         } else {
@@ -143,11 +141,9 @@ class Calculator: UIViewController {
     
     
     func configureSembolAction(sembol: String) {
-        
         guard let calculator = self.calculationLabel.text else {
             return
         }
-        
         if calculator.count >= 1 {
             let lastIndex = calculator.index(calculator.endIndex, offsetBy: -1)
             let secondToLastCharacter = calculator[lastIndex]
@@ -156,6 +152,7 @@ class Calculator: UIViewController {
                 secondToLastCharacter == "*" ||
                 secondToLastCharacter == "+" ||
                 secondToLastCharacter == "-" ||
+                secondToLastCharacter == "." ||
                 calculator == "0" {
             } else {
                 self.calculationLabel.text = calculator + sembol
@@ -184,6 +181,11 @@ class Calculator: UIViewController {
             self.configureSembolAction(sembol: "+")
         }), for: .touchUpInside)
         
+        pointButton.addAction(UIAction(handler: { _ in
+            self.configureSembolAction(sembol: ".")
+        }), for: .touchUpInside)
+        
+        
     }
     
     func configureActions() {
@@ -206,20 +208,74 @@ class Calculator: UIViewController {
                 } else {
                     self.calculationLabel.text = calculator
                 }
-                
-                
             }
+        }), for: .touchUpInside)
+        
+        
+        
+        equalButton.addAction(UIAction(handler: { _ in
             
-            
+            self.calculator()
             
         }), for: .touchUpInside)
         
         
+        
+        
+        
     }
     
-    
-    
-    
-    
+    func calculator() {
+        
+        guard let calculator = self.calculationLabel.text else {
+            return
+        }
+        
+        
+//            let string = "5*11"
+        let regex = try! NSRegularExpression(pattern: "\\d+")
+        let matches = regex.matches(in: calculator, range: NSRange(calculator.startIndex..., in: calculator))
+
+        var numbers = [Int]()
+        var operations = [Character]()
+
+        for match in matches {
+            if let range = Range(match.range, in: calculator), let number = Int(calculator[range]) {
+                numbers.append(number)
+            }
+        }
+
+        for character in calculator {
+            if "+-*/".contains(character) {
+                operations.append(character)
+            }
+        }
+
+        var result = numbers[0]
+
+        for i in 0..<operations.count {
+            let operation = operations[i]
+            let number = numbers[i + 1]
+            
+            switch operation {
+            case "+":
+                result += number
+            case "-":
+                result -= number
+            case "*":
+                result *= number
+            case "/":
+                if number != 0 {
+                    result /= number
+                } else {
+                    print("Bölme sıfıra bölünemez!")
+                    break
+                }
+            default:
+                break
+            }
+        }
+        resultLabel.text = String(result)
+    }
 }
 
