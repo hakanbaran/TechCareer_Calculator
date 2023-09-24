@@ -163,7 +163,15 @@ class Calculator: UIViewController {
                 secondToLastCharacter == "." ||
                 calculator == "0" {
             } else {
-                self.calculationLabel.text = calculator + sembol
+                if calculator.contains("*") ||
+                    calculator.contains("/") ||
+                    calculator.contains("+") ||
+                    calculator.contains("-") {
+                    self.calculator()
+                    self.calculationLabel.text = (self.resultLabel.text ?? "0") + sembol
+                } else {
+                    self.calculationLabel.text = calculator + sembol
+                }
             }
         } else {
             self.calculationLabel.text = calculator + sembol
@@ -220,7 +228,6 @@ class Calculator: UIViewController {
         }), for: .touchUpInside)
         
         
-        
         equalButton.addAction(UIAction(handler: { _ in
             
             guard let calculator = self.calculationLabel.text else {
@@ -241,13 +248,6 @@ class Calculator: UIViewController {
                     
                 }
             }
-            
-            
-            
-            
-            
-            
-            
         }), for: .touchUpInside)
         
     }
