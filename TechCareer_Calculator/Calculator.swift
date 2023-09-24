@@ -84,8 +84,8 @@ class Calculator: UIViewController {
                     button.layer.cornerRadius = 10
                     button.layer.shadowColor = UIColor.black.cgColor
                     button.layer.shadowOffset = CGSize(width: 0, height: 2)
-                    button.layer.shadowRadius = 3
-                    button.layer.shadowOpacity = 0.5
+                    button.layer.shadowRadius = 5
+                    button.layer.shadowOpacity = 1
                 }
     }
     
@@ -198,7 +198,7 @@ class Calculator: UIViewController {
         }), for: .touchUpInside)
         
         pointButton.addAction(UIAction(handler: { _ in
-            self.configureSembolAction(sembol: ".")
+//            self.configureSembolAction(sembol: ".")
         }), for: .touchUpInside)
         
         
